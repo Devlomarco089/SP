@@ -9,9 +9,46 @@ export default defineConfig({
       '/api': 'http://localhost:8000',  // Para desarrollo local
     },
   },
-  build: {
-    outDir: '../backend/staticfiles',  // Carpeta de salida para Django
-    emptyOutDir: true,                 // Borra archivos viejos antes de construir
-    manifest: true,                    // Genera un manifest para Django
+  server: {
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      },
+      '/static': {
+        target: 'http://localhost:8000',
+        changeOrigin: true
+      },
+      '/media': {
+        target: 'http://localhost:8000',
+        changeOrigin: true
+      }
+    }
   },
+
+  
+  build: {
+    outDir: '../backend/staticfiles/dist',  // Asegura esta ruta
+    emptyOutDir: true,
+    manifest: true,
+    sourcemap: false,  // Desactiva sourcemaps en producción
+    rollupOptions: {
+      output: {
+        entryFileNames: `assets/[name].[hash].js`,
+        chunkFileNames: `assets/[name].[hash].js`,
+        assetFileNames: `assets/[name].[hash].[ext]`,
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        }
+      }
+    }
+  },
+
+  // Configuración base para las URLs
+  base: '/static/dist/'
 });

@@ -152,7 +152,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Para desarrollo
-    "https://<tu-dominio>.railway.app",  # Dominio de producción
+    "https://SpaSentrseBien.railway.app",  # Dominio de producción
 ]
 
 REST_FRAMEWORK = {
